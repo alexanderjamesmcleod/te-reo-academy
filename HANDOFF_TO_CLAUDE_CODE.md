@@ -7,12 +7,38 @@
 - Complete database schema with RLS policies in `supabase/migrations/`
 - Monorepo structure with npm workspaces
 - GitHub repo: https://github.com/alexanderjamesmcleod/te-reo-academy
+- **AI-Ready**: Designed for future PydanticAI integration (Phase 3-4)
 
 **Shared Package Complete ✅**
 - All 4 validators ported from v3 (ko, he, equative, keiTe)
 - Complete TypeScript types aligned with Supabase schema
 - Word library (50+ words with NZSL placeholders)
 - Curriculum data (Module 1 & 2, 7 lessons, 8 sample challenges)
+
+## 🤖 AI Vision (Future Phases)
+
+**Why TypeScript Now, Python Later:**
+- **Phase 1-2**: Ship fast with TypeScript (validators, game, auth)
+- **Phase 3-4**: Add PydanticAI microservice for intelligent tutoring
+- **No wasted work**: Supabase schema is language-agnostic, React UI stays
+
+**Future AI Features (PydanticAI Integration):**
+- 🤖 **Conversational tutor**: "Why is this sentence wrong?"
+- 🎯 **Adaptive difficulty**: AI adjusts challenges based on learning patterns
+- 💬 **Pronunciation feedback**: Whisper API integration for speech evaluation
+- 📊 **Personalized hints**: Context-aware help during gameplay
+- 🎨 **Dynamic challenge generation**: AI creates new sentences on-the-fly
+- 🧠 **Learning analytics**: ML-powered progress insights
+
+**Hybrid Architecture (Future State):**
+```
+React Frontend (TypeScript)
+       ↓
+       ├──→ Supabase (PostgreSQL + Auth)  [Game data, progress]
+       └──→ FastAPI + PydanticAI (Python)  [AI tutor, adaptive learning]
+```
+
+**Note for Claude Code**: Build validators in TypeScript now. When AI features are needed (Phase 3-4), we'll add a Python FastAPI microservice alongside this. The architectures complement each other perfectly.
 
 ## 🚀 Your Mission: Build the Frontend
 
@@ -291,6 +317,7 @@ These are ready for Phase 4 (NZSL integration) - don't implement yet, just prese
 - Shared validators used by frontend AND Supabase functions
 - Shared types ensure DB/frontend alignment
 - Easy to add mobile app later (`packages/mobile/`)
+- Ready for Python AI microservice (Phase 3-4)
 
 ### Why Port from V3?
 - V3 has 198 passing tests
@@ -299,6 +326,15 @@ These are ready for Phase 4 (NZSL integration) - don't implement yet, just prese
   1. Convert JSX → TSX
   2. Add Supabase integration
   3. Improve UX with Tailwind
+
+### Why TypeScript Now, Python Later?
+- **Ship velocity**: TS validators are done, React UI can start TODAY
+- **AI is Phase 3-4**: PydanticAI microservice added when needed
+- **Best of both worlds**: 
+  - TypeScript for UI type safety & game logic
+  - Python for AI/ML features (PydanticAI, Whisper, adaptive learning)
+- **Clean separation**: Main app (TS) + AI service (Python) = scalable
+- **No wasted work**: Supabase schema works with both stacks
 
 ## 🤝 Communication Protocol
 
@@ -330,9 +366,44 @@ You're starting with a **rock-solid foundation**:
 - ✅ All validators ported and typed
 - ✅ Curriculum data complete
 - ✅ Architecture decisions made
+- ✅ AI-ready architecture (Python integration path clear)
 
 Your job: **Make it beautiful and interactive!**
+
+**Phase 1-2 Focus**: Build the core game experience with TypeScript
+**Phase 3-4 Plan**: Add PydanticAI microservice for intelligent tutoring
 
 Start with Phase 1 (Vite + React setup) and let me know when you're ready for Phase 2.
 
 Good luck! 🚀
+
+---
+
+## 📌 Future: PydanticAI Integration (Phase 3-4)
+
+When ready to add AI features, we'll create:
+
+```
+te-reo-academy-prod/
+├── packages/
+│   ├── frontend/     ← Current React app
+│   ├── shared/       ← Current validators/types
+│   └── ai-service/   ← NEW: Python FastAPI + PydanticAI
+│       ├── pyproject.toml
+│       ├── app/
+│       │   ├── agents/        # PydanticAI conversational tutor
+│       │   ├── models/        # Pydantic models
+│       │   ├── services/      # Adaptive learning logic
+│       │   └── routers/       # AI endpoints
+│       └── Dockerfile
+└── supabase/         ← Shared by all services
+```
+
+**AI Service Capabilities:**
+- Conversational tutoring using PydanticAI
+- Adaptive difficulty adjustment based on user patterns
+- Speech-to-text pronunciation feedback (Whisper API)
+- Dynamic challenge generation
+- Learning analytics and progress insights
+
+**No changes needed to current work** - the AI service will be a standalone microservice that complements the existing app.

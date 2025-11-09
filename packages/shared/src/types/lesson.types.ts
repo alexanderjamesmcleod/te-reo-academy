@@ -1,45 +1,46 @@
-// Lesson and curriculum types
+/**
+ * Lesson and Curriculum Types
+ * Aligned with Supabase schema
+ */
+
 export interface Challenge {
   id: string;
+  type: 'build' | 'choose_correct' | 'free_build';
+  difficulty: 'easy' | 'medium' | 'hard';
   instruction: string;
+  target: {
+    maori: string;
+    english: string;
+  };
   pattern: string[];
-  requiredWords?: string[];
-  hints?: string[];
+  requiredCards?: string[]; // Word IDs
+  availableCards?: string[]; // For free build
+  hints?: Array<{
+    trigger: string;
+    message: string;
+  }>;
 }
 
 export interface Lesson {
   id: string;
-  moduleId: string;
-  number: number;
-  name: string;
-  nameEnglish: string;
+  module_id: string;
+  title: string;
   description: string;
-  objectives: string[];
-  grammar: {
+  order_index: number;
+  lesson_type: 'tutorial' | 'practice' | 'challenge' | 'test';
+  grammar?: {
     structure: string;
     pattern: string[];
-    colors: string[];
-    explanation: {
-      simple: string;
-      detailed: string;
-      examples: any[];
-    };
+    explanation: string;
+    tips: string[];
   };
-  newWords: string[];
-  challenges: Challenge[];
-  mastery: {
-    required: number;
-    unlocks?: string;
-  };
+  vocabulary_introduced?: string[]; // Word IDs
 }
 
 export interface Module {
   id: string;
-  number: number;
-  name: string;
-  nameEnglish: string;
+  title: string;
   description: string;
-  unlocked: boolean;
-  prerequisite?: string;
+  order_index: number;
   lessons: Lesson[];
 }

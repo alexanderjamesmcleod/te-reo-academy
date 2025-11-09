@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { DashboardLayout } from '@/layouts/DashboardLayout';
 import { CardHand, SentenceBuilder, ChallengeDisplay } from '@/components/game';
-import { useLessons } from '@/hooks/useLessons';
+import { useLesson } from '@/hooks/useLesson';
 import { useChallenges } from '@/hooks/useChallenges';
 import { useSaveProgress, useUpdateProgress } from '@/hooks/useSaveProgress';
 import { useLessonProgress } from '@/hooks/useProgress';
@@ -28,8 +28,7 @@ export function LessonView() {
   const navigate = useNavigate();
 
   // Fetch lesson data
-  const { data: lessons, isLoading: lessonsLoading } = useLessons(lessonId?.split('_')[0] || ''); // Extract module_id
-  const lesson = lessons?.find((l) => l.id === lessonId);
+  const { data: lesson, isLoading: lessonLoading, error: lessonError } = useLesson(lessonId || '');
 
   // Fetch challenges for this lesson
   const { data: challengesData, isLoading: challengesLoading, error: challengesError } = useChallenges(lessonId || '');
@@ -42,7 +41,7 @@ export function LessonView() {
   const saveProgress = useSaveProgress();
   const updateProgress = useUpdateProgress();
 
-  const isLoading = lessonsLoading || challengesLoading;
+  const isLoading = lessonLoading || challengesLoading;
 
   // Game state
   const [currentChallengeIndex, setCurrentChallengeIndex] = useState(0);
@@ -231,6 +230,24 @@ export function LessonView() {
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
             <span className="ml-4 text-gray-600">Loading lesson...</span>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  // Error loading lesson
+  if (lessonError) {
+    return (
+      <DashboardLayout>
+        <div className="bg-white rounded-lg shadow-xl p-8">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+            <p className="text-red-800 font-semibold mb-2">
+              Failed to load lesson
+            </p>
+            <p className="text-red-600 text-sm">
+              {lessonError instanceof Error ? lessonError.message : 'Unknown error'}
+            </p>
           </div>
         </div>
       </DashboardLayout>

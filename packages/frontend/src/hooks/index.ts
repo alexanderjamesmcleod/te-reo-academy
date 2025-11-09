@@ -6,6 +6,7 @@
 // Query hooks
 export { useModules } from './useModules';
 export { useLessons } from './useLessons';
+export { useLesson } from './useLesson';
 export { useChallenges } from './useChallenges';
 export { useProgress, useLessonProgress } from './useProgress';
 

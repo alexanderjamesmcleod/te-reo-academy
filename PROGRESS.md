@@ -91,18 +91,49 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (configured)
 
 ---
 
+### Phase 4: Core Game Components ✅ (Completed: 2025-11-10)
+**Status**: Complete and tested
+
+**Achievements**:
+- ✅ Card component ported from v3 (JSX → TSX)
+- ✅ CardHand component ported with TypeScript
+- ✅ SentenceBuilder component ported with slot-based UI
+- ✅ ValidationFeedback component with rich feedback display
+- ✅ ChallengeDisplay component for game instructions
+- ✅ All components converted to Tailwind CSS styling
+- ✅ TypeScript types integrated from `@te-reo-academy/shared`
+- ✅ GameDemo page created to test all components
+- ✅ Validator integration working (validateKoSentence)
+- ✅ Protected route added for `/game-demo`
+
+**Features**:
+- Card components with color coding by word type
+- Interactive sentence building with click-to-place cards
+- Real-time validation with feedback
+- Word breakdown display in te reo + English
+- Challenge instructions with hints and examples
+- Keyboard accessibility (Enter/Space for selection)
+- Responsive Tailwind styling
+
+**Key Files**:
+- `packages/frontend/src/components/game/Card.tsx` - Card display component
+- `packages/frontend/src/components/game/CardHand.tsx` - Player's hand of cards
+- `packages/frontend/src/components/game/SentenceBuilder.tsx` - Sentence construction area
+- `packages/frontend/src/components/game/ValidationFeedback.tsx` - Validation results display
+- `packages/frontend/src/components/game/ChallengeDisplay.tsx` - Challenge info display
+- `packages/frontend/src/components/game/index.ts` - Component exports
+- `packages/frontend/src/pages/GameDemo.tsx` - Interactive demo page
+
+**Demo**:
+- URL: `http://localhost:5173/game-demo` (requires login)
+- Interactive card game with Ko sentence pattern validation
+- Test sentence: "Ko te kuri" (It is the dog)
+
+---
+
 ## 🚧 In Progress
 
-### Phase 4: Port Core Game Components from V3
-**Status**: Not started
-**Next Steps**:
-1. Port Card component (JSX → TSX)
-2. Port CardHand component
-3. Port SentenceBuilder component
-4. Port GameBoard component
-5. Integrate with validators from `@te-reo-academy/shared`
-6. Add drag-and-drop functionality
-7. Implement validation feedback UI
+_(No active work items)_
 
 ---
 

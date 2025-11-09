@@ -17,12 +17,14 @@
 - Word library (50+ words with NZSL placeholders)
 - Curriculum data (Module 1 & 2, 7 lessons, 8 sample challenges)
 
-**Frontend Complete (Phases 1-3) ✅**
+**Frontend Complete (Phases 1-4) ✅**
 - React 18 + Vite + TypeScript + Tailwind CSS
 - Supabase client connected (port 8000)
 - Full authentication system (login, signup, protected routes)
 - Landing page, Dashboard, and auth pages
 - Session persistence working
+- Core game components ported (Card, CardHand, SentenceBuilder, ValidationFeedback, ChallengeDisplay)
+- GameDemo page with working validator integration
 - Test account: test@example.com / password123
 
 ## 🤖 AI Vision (Future Phases)

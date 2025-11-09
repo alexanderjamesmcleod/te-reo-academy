@@ -67,6 +67,13 @@ export function Dashboard() {
           </div>
 
           <div className="mt-8 text-center">
+            <button
+              onClick={() => navigate('/game-demo')}
+              className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-semibold mb-6"
+            >
+              🎮 Try Game Components Demo
+            </button>
+
             <p className="text-gray-600 mb-4">
               Learning modules coming in Phase 5 & 6!
             </p>
@@ -80,8 +87,8 @@ export function Dashboard() {
               <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full">
                 ✓ Phase 3: Auth
               </span>
-              <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full">
-                Phase 4: Game Components
+              <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full">
+                🚧 Phase 4: Game Components (In Progress)
               </span>
             </div>
           </div>

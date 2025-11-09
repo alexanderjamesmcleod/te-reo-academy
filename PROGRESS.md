@@ -131,6 +131,103 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (configured)
 
 ---
 
+### Phase 5: Routing & Layout System ✅ (Completed: 2025-11-10)
+**Status**: Complete and tested
+
+**Achievements**:
+- ✅ DashboardLayout component created with consistent navigation
+- ✅ ModuleView page displays modules and their lessons
+- ✅ LessonView page shows lesson content and challenges
+- ✅ Updated Dashboard to display all available modules
+- ✅ Protected routes for all new pages
+- ✅ Navigation links between Dashboard → Modules → Lessons
+- ✅ Consistent header/footer across all authenticated pages
+- ✅ Updated GameDemo to use DashboardLayout
+- ✅ All pages use static data from shared package
+- ✅ TypeScript type checking passes with no errors
+
+**Features**:
+- Reusable DashboardLayout with auth-aware navigation
+- Module cards with lesson counts and progress placeholders
+- Lesson cards with type badges (tutorial/practice/challenge)
+- Grammar explanations and tips display
+- Challenge previews with difficulty levels
+- Responsive design with Tailwind CSS
+- Breadcrumb navigation (back links)
+- Active route highlighting in navigation
+
+**Key Files**:
+- `packages/frontend/src/layouts/DashboardLayout.tsx` - Shared layout component
+- `packages/frontend/src/pages/Dashboard.tsx` - Updated with module cards
+- `packages/frontend/src/pages/ModuleView.tsx` - Module and lessons display
+- `packages/frontend/src/pages/LessonView.tsx` - Lesson content and challenges
+- `packages/frontend/src/pages/GameDemo.tsx` - Updated to use layout
+- `packages/frontend/src/App.tsx` - Routes for modules and lessons
+
+**Routes**:
+- `/dashboard` - Main dashboard with all modules
+- `/modules/:moduleId` - Specific module view with lessons
+- `/lessons/:lessonId` - Specific lesson view with content
+- `/game-demo` - Interactive game demo
+
+**Testing**:
+- Dev server running on `http://localhost:5173`
+- All routes accessible and working
+- Navigation flow: Dashboard → Module → Lesson
+- TypeScript compilation successful
+
+---
+
+### Phase 6: Data Fetching with React Query ✅ (Completed: 2025-11-10)
+**Status**: Complete and tested
+
+**Achievements**:
+- ✅ React Query client configured with QueryClientProvider
+- ✅ React Query Devtools installed for debugging
+- ✅ useModules hook created for fetching all modules
+- ✅ useLessons hook created for fetching lessons by module
+- ✅ useChallenges hook created for fetching lesson challenges
+- ✅ useProgress hook created for fetching user progress
+- ✅ useSaveProgress mutation hook for saving attempts and progress
+- ✅ useUpdateProgress mutation hook for quick status updates
+- ✅ Dashboard updated to use live data from Supabase
+- ✅ ModuleView updated with real-time progress tracking
+- ✅ LessonView integrated with progress saving
+- ✅ All components have loading and error states
+- ✅ Cache invalidation working correctly
+- ✅ TypeScript compilation passing with no errors
+
+**Key Files**:
+- `packages/frontend/src/lib/queryClient.ts` - React Query configuration
+- `packages/frontend/src/hooks/useModules.ts` - Modules query hook
+- `packages/frontend/src/hooks/useLessons.ts` - Lessons query hook
+- `packages/frontend/src/hooks/useChallenges.ts` - Challenges query hook
+- `packages/frontend/src/hooks/useProgress.ts` - Progress query hooks
+- `packages/frontend/src/hooks/useSaveProgress.ts` - Progress mutation hooks
+- `packages/frontend/src/hooks/index.ts` - Hooks barrel export
+- `packages/frontend/src/pages/Dashboard.tsx` - Updated with useModules
+- `packages/frontend/src/pages/ModuleView.tsx` - Updated with useLessons + useProgress
+- `packages/frontend/src/pages/LessonView.tsx` - Updated with useChallenges + useSaveProgress
+
+**Features**:
+- Real-time data fetching from Supabase
+- Automatic cache management and invalidation
+- Progress tracking saves to database on each attempt
+- Lessons marked as "in_progress" when viewed
+- Lessons marked as "completed" when all challenges are finished
+- Loading spinners during data fetch
+- Error messages for failed queries
+- Empty states when no data available
+- Progress indicators on module and lesson cards
+
+**Database Integration**:
+- Verified: 2 modules, 9 lessons, 3 challenges in database
+- Progress saves correctly to `user_progress` table
+- Attempts save correctly to `lesson_attempts` table
+- Cache invalidation triggers refetch after mutations
+
+---
+
 ## 🚧 In Progress
 
 _(No active work items)_
@@ -139,17 +236,11 @@ _(No active work items)_
 
 ## 📋 Upcoming Phases
 
-### Phase 5: Routing & Layout System
-- React Router with protected routes
-- DashboardLayout component
-- Module and Lesson view pages
-- Navigation between learning content
-
-### Phase 6: Data Fetching with React Query
-- Custom hooks (useLessons, useModules, useProgress)
-- Progress saving mutations
-- Optimistic updates
-- Cache management
+### Phase 7: Advanced Features
+- Multiplayer challenges
+- Real-time game sessions
+- Leaderboards
+- Achievement system
 
 ---
 
@@ -179,20 +270,24 @@ _(No active work items)_
 
 ## 📊 Project Statistics
 
-**Lines of Code**: ~1,500+ (frontend only)
-**Components**: 6 pages, 1 context, 1 protected route component
-**Dependencies**: 15+ packages installed
+**Lines of Code**: ~3,500+ (frontend only)
+**Components**: 9 pages, 1 layout, 1 context, 1 protected route component, 5 game components
+**Custom Hooks**: 6 data hooks (5 queries + 2 mutations)
+**Dependencies**: 16+ packages installed
 **Database Tables**: 8 tables with RLS policies
 **Test Coverage**: Validators tested in shared package (from v3)
+**Supabase Integration**: ✅ Live data fetching and progress tracking
 
 ---
 
 ## 🎯 Next Session Goals
 
-1. **Port Game Components** from v3 codebase
-2. **Implement Drag-and-Drop** for card game mechanics
-3. **Connect Game UI** to Supabase challenges
-4. **Test Full Lesson Flow** end-to-end
+**Phase 7 Ideas:**
+1. **Seed more challenges** - Add challenges for all lessons
+2. **Implement word card system** - Store word cards in database for dynamic challenge generation
+3. **Add challenge editor** - Admin interface to create/edit challenges
+4. **Enhanced progress tracking** - Detailed analytics and learning insights
+5. **Multiplayer features** - Real-time game sessions with Supabase Realtime
 
 ---
 
@@ -205,4 +300,28 @@ _(No active work items)_
 
 ---
 
-_Last Updated: 2025-11-09_
+---
+
+## 🎉 Phase 6 Summary
+
+**What was accomplished:**
+- Complete React Query integration with TanStack Query v5
+- 6 custom hooks for data fetching and mutations
+- Full Supabase integration with automatic cache management
+- Real-time progress tracking saves to database
+- All 3 main pages (Dashboard, ModuleView, LessonView) using live data
+- Loading states, error handling, and empty states throughout
+- TypeScript compilation with zero errors
+
+**Impact:**
+- App now fetches live data from Supabase instead of static JSON
+- User progress persists across sessions
+- Cache invalidation ensures UI stays in sync with database
+- Foundation ready for advanced features (multiplayer, real-time updates)
+
+**Next Steps:**
+Phase 7 can focus on enhancing the game experience with more challenges, better word management, and multiplayer features!
+
+---
+
+_Last Updated: 2025-11-10_

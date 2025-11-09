@@ -29,9 +29,17 @@ A full-stack, production-ready te reo Māori learning platform with multiplayer 
 ## �🏗️ Architecture
 
 This is a monorepo containing:
-- **Frontend**: React + Vite application with offline capabilities
-- **Backend**: Node.js + TypeScript + Express API server
+- **Frontend**: React + Vite + TypeScript application with TanStack Query
+- **Backend**: Supabase (PostgreSQL + Auth + Realtime + Storage)
 - **Shared**: Common validators, types, and data structures
+
+### Tech Stack
+- **Frontend**: React 18, TypeScript, Vite, TailwindCSS, shadcn/ui
+- **State Management**: Zustand for local state, TanStack Query for server state
+- **Database**: Supabase PostgreSQL with Row Level Security (RLS)
+- **Authentication**: Supabase Auth with JWT tokens
+- **Real-time**: Supabase Realtime for multiplayer features
+- **Testing**: Vitest + React Testing Library
 
 ## 🚀 Quick Start
 
@@ -63,10 +71,10 @@ supabase start
 # - anon key: eyJ...
 # - service_role key: eyJ...
 
-# 3. Create .env file in packages/frontend
+# 3. Create .env.local file in packages/frontend
 cd packages/frontend
-cat > .env << EOF
-VITE_SUPABASE_URL=http://localhost:54321
+cat > .env.local << EOF
+VITE_SUPABASE_URL=http://localhost:8000
 VITE_SUPABASE_ANON_KEY=<your-anon-key-from-step-2>
 EOF
 

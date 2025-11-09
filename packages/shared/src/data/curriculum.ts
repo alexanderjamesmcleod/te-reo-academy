@@ -298,6 +298,58 @@ export function getChallengeById(challengeId: string): Challenge | undefined {
   return SAMPLE_CHALLENGES.find(c => c.id === challengeId);
 }
 
+/**
+ * Get all challenges for a specific lesson
+ * Matches challenges by lesson ID pattern (e.g., lesson_1_1 -> c_1_1_*)
+ */
+export function getChallengesForLesson(lessonId: string): Challenge[] {
+  // Extract lesson number pattern from lesson ID (e.g., "lesson_1_1" -> "1_1")
+  const lessonPattern = lessonId.replace('lesson_', '');
+  const challengePrefix = `c_${lessonPattern}_`;
+
+  return SAMPLE_CHALLENGES.filter(c => c.id.startsWith(challengePrefix));
+}
+
+/**
+ * Get the next lesson in sequence
+ */
+export function getNextLesson(currentLessonId: string): Lesson | undefined {
+  const currentLesson = getLessonById(currentLessonId);
+  if (!currentLesson) return undefined;
+
+  const module = getModuleById(currentLesson.module_id);
+  if (!module) return undefined;
+
+  const sortedLessons = [...module.lessons].sort((a, b) => a.order_index - b.order_index);
+  const currentIndex = sortedLessons.findIndex(l => l.id === currentLessonId);
+
+  if (currentIndex === -1 || currentIndex === sortedLessons.length - 1) {
+    return undefined; // Last lesson in module
+  }
+
+  return sortedLessons[currentIndex + 1];
+}
+
+/**
+ * Get the previous lesson in sequence
+ */
+export function getPreviousLesson(currentLessonId: string): Lesson | undefined {
+  const currentLesson = getLessonById(currentLessonId);
+  if (!currentLesson) return undefined;
+
+  const module = getModuleById(currentLesson.module_id);
+  if (!module) return undefined;
+
+  const sortedLessons = [...module.lessons].sort((a, b) => a.order_index - b.order_index);
+  const currentIndex = sortedLessons.findIndex(l => l.id === currentLessonId);
+
+  if (currentIndex <= 0) {
+    return undefined; // First lesson in module
+  }
+
+  return sortedLessons[currentIndex - 1];
+}
+
 export default {
   CURRICULUM,
   MODULE_1,
@@ -305,5 +357,8 @@ export default {
   SAMPLE_CHALLENGES,
   getModuleById,
   getLessonById,
-  getChallengeById
+  getChallengeById,
+  getChallengesForLesson,
+  getNextLesson,
+  getPreviousLesson
 };

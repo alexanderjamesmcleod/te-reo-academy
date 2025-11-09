@@ -350,11 +350,64 @@ These are ready for Phase 4 (NZSL integration) - don't implement yet, just prese
 
 ## 🤝 Communication Protocol
 
+### Phase-Based Development Workflow
+
+**IMPORTANT**: To maintain clean context and focused development, start a **NEW CHAT** for each phase or major feature.
+
+**Starting a New Phase:**
+
+Use this prompt template to resume work in a fresh chat:
+
+```
+Hi Claude! I'm continuing work on Te Reo Academy.
+
+**Current Status:**
+- Phase [X] is complete (see PROGRESS.md)
+- All changes committed and pushed to GitHub
+- Latest commit: [commit hash or "see git log"]
+
+**Next Task:**
+Please start Phase [X+1]: [Phase Name]
+
+**Instructions:**
+1. Read HANDOFF_TO_CLAUDE_CODE.md for project overview
+2. Read PROGRESS.md to see what's been completed
+3. Read CLAUDE.md for development standards
+4. Check Archon tasks with find_tasks() for any existing tasks
+5. Begin Phase [X+1] implementation
+
+Ready to continue! 🚀
+```
+
+**Example for Phase 5:**
+```
+Hi Claude! I'm continuing work on Te Reo Academy.
+
+**Current Status:**
+- Phase 4 is complete (see PROGRESS.md)
+- All changes committed and pushed to GitHub
+- Game components working perfectly!
+
+**Next Task:**
+Please start Phase 5: Routing & Layout System
+
+**Instructions:**
+1. Read HANDOFF_TO_CLAUDE_CODE.md for project overview
+2. Read PROGRESS.md to see what's been completed
+3. Read CLAUDE.md for development standards
+4. Check Archon tasks with find_tasks() for any existing tasks
+5. Begin Phase 5 implementation
+
+Ready to continue! 🚀
+```
+
 ### When to Ask Me (Chat)
 - Architectural questions (should this be a hook? context? state?)
 - Supabase query patterns (RLS, relationships, subscriptions)
 - Where to find specific v3 code
 - TypeScript type questions
+- Major design decisions
+- Clarification on requirements
 
 ### What You Can Build Independently
 - Component structure
@@ -363,13 +416,16 @@ These are ready for Phase 4 (NZSL integration) - don't implement yet, just prese
 - Form handling
 - Error boundaries
 - Loading states
+- Standard CRUD operations
 
 ### Regular Check-ins
 After each phase:
-1. Commit your work
+1. Commit your work with detailed commit message
 2. Push to GitHub
-3. Ask: "Phase X complete, ready for review?"
-4. I'll test, provide feedback, guide next phase
+3. Update PROGRESS.md with completion status
+4. Update Archon task status to "review"
+5. Provide summary of what was completed
+6. **Start fresh chat for next phase** using template above
 
 ## 🎉 Let's Build!
 

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { DashboardLayout } from '@/layouts/DashboardLayout';
 import { CardHand, SentenceBuilder, ChallengeDisplay } from '@/components/game';
 import { validateKoSentence } from '@te-reo-academy/shared';
 import type { Card, ValidationResult } from '@te-reo-academy/shared';
@@ -10,42 +11,42 @@ import type { Card, ValidationResult } from '@te-reo-academy/shared';
  * This page tests Phase 4 component integration
  */
 
-// Sample cards for demo
+// Sample cards for demo - colors MUST match word library!
 const demoCards: Card[] = [
   {
     id: '1',
     maori: 'Ko',
     english: 'definite particle',
     type: 'particle',
-    color: 'purple',
+    color: 'purple', // Particles are purple
   },
   {
     id: '2',
     maori: 'te',
     english: 'the (singular)',
     type: 'article',
-    color: 'blue',
+    color: 'gray', // Articles are gray
   },
   {
     id: '3',
     maori: 'kuri',
     english: 'dog',
     type: 'noun',
-    color: 'green',
+    color: 'blue', // Nouns are blue
   },
   {
     id: '4',
     maori: 'ngā',
     english: 'the (plural)',
     type: 'article',
-    color: 'blue',
+    color: 'gray', // Articles are gray
   },
   {
     id: '5',
     maori: 'tamariki',
     english: 'children',
     type: 'noun',
-    color: 'green',
+    color: 'blue', // Nouns are blue
   },
 ];
 
@@ -58,7 +59,6 @@ const demoChallenge = {
 };
 
 export function GameDemo() {
-  const navigate = useNavigate();
   const [hand, setHand] = useState<Card[]>(demoCards);
   const [sentence, setSentence] = useState<(Card | null)[]>([null, null, null]);
   const [selectedCardId, setSelectedCardId] = useState<string | undefined>();
@@ -66,7 +66,7 @@ export function GameDemo() {
   const [round] = useState(1);
   const [score] = useState(0);
 
-  const pattern = ['purple', 'blue', 'green']; // Ko + article + noun
+  const pattern = ['purple', 'gray', 'blue']; // Ko (purple) + article (gray) + noun (blue)
 
   const handleCardSelect = (id: string) => {
     setSelectedCardId(id);
@@ -122,26 +122,22 @@ export function GameDemo() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+    <DashboardLayout>
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-800 mb-2">
-                Game Components Demo
-              </h1>
-              <p className="text-gray-600">
-                Testing Phase 4: Core Game Components (Card, CardHand, SentenceBuilder)
-              </p>
-            </div>
-            <button
-              onClick={() => navigate('/dashboard')}
-              className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-            >
-              Back to Dashboard
-            </button>
-          </div>
+          <Link
+            to="/dashboard"
+            className="inline-flex items-center text-indigo-600 hover:text-indigo-700 mb-4 text-sm font-medium"
+          >
+            ← Back to Dashboard
+          </Link>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            Game Components Demo
+          </h1>
+          <p className="text-gray-600">
+            Testing Phase 4: Core Game Components (Card, CardHand, SentenceBuilder)
+          </p>
         </div>
 
         {/* Challenge Display */}
@@ -198,6 +194,6 @@ export function GameDemo() {
           </ol>
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

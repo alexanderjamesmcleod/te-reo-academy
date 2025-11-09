@@ -1,53 +1,37 @@
+import { Link } from 'react-router-dom';
+import { DashboardLayout } from '@/layouts/DashboardLayout';
 import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import { useModules } from '@/hooks/useModules';
+import { useProgress } from '@/hooks/useProgress';
 
+/**
+ * Dashboard - Main user dashboard
+ *
+ * Displays learning modules and user progress overview.
+ * Fetches real-time data from Supabase.
+ */
 export function Dashboard() {
-  const { user, signOut } = useAuth();
-  const navigate = useNavigate();
-
-  const handleSignOut = async () => {
-    const { error } = await signOut();
-    if (error) {
-      toast.error('Failed to sign out');
-    } else {
-      toast.success('Signed out successfully');
-      navigate('/');
-    }
-  };
+  const { user } = useAuth();
+  const { data: modules, isLoading, error } = useModules();
+  const { data: allProgress } = useProgress();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <h1 className="text-xl font-bold text-indigo-600">
-              Te Reo Academy
-            </h1>
-            <button
-              onClick={handleSignOut}
-              className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
-            >
-              Sign out
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <DashboardLayout>
+      <div className="space-y-6">
+        {/* Welcome Section */}
         <div className="bg-white rounded-lg shadow-xl p-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Kia ora! Welcome to your dashboard
+            Kia ora! Welcome back
           </h2>
 
           <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
             <p className="text-sm font-semibold text-green-800 mb-2">
-              ✅ Phase 3 Complete: Authentication
+              ✅ Phase 6 Active: Data Fetching with React Query
             </p>
             <ul className="text-sm text-green-700 space-y-1">
-              <li>• User authentication working</li>
-              <li>• Protected routes active</li>
-              <li>• Session persistence enabled</li>
+              <li>• Live data from Supabase</li>
+              <li>• Real-time progress tracking</li>
+              <li>• Optimized caching with React Query</li>
             </ul>
           </div>
 
@@ -65,35 +49,197 @@ export function Dashboard() {
               </p>
             </div>
           </div>
+        </div>
 
-          <div className="mt-8 text-center">
-            <button
-              onClick={() => navigate('/game-demo')}
-              className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-semibold mb-6"
+        {/* Learning Modules */}
+        <div className="bg-white rounded-lg shadow-xl p-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            Your Learning Path
+          </h2>
+
+          {/* Loading State */}
+          {isLoading && (
+            <div className="flex items-center justify-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+              <span className="ml-4 text-gray-600">Loading modules...</span>
+            </div>
+          )}
+
+          {/* Error State */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+              <p className="text-red-800 font-semibold mb-2">
+                Failed to load modules
+              </p>
+              <p className="text-red-600 text-sm">
+                {error instanceof Error ? error.message : 'Unknown error'}
+              </p>
+            </div>
+          )}
+
+          {/* Modules Grid */}
+          {modules && modules.length > 0 && (
+            <div className="grid gap-6 md:grid-cols-2">
+              {modules.map((module) => {
+                // Calculate progress for this module
+                const moduleProgress = allProgress?.filter(
+                  (p) => p.module_id === module.id
+                ) || [];
+                const completedLessons = moduleProgress.filter(
+                  (p) => p.status === 'completed'
+                ).length;
+                // Note: We'll get actual lesson count from useLessons in ModuleView
+                const progressPercent = 0; // Will be calculated when we have lesson count
+
+                return (
+                  <Link
+                    key={module.id}
+                    to={`/modules/${module.id}`}
+                    className="group border border-gray-200 rounded-lg p-6 hover:border-indigo-300 hover:shadow-lg transition-all"
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-3 mb-2">
+                          <span className="flex items-center justify-center w-10 h-10 bg-indigo-100 text-indigo-700 rounded-full text-lg font-bold">
+                            {module.order_index}
+                          </span>
+                          <h3 className="text-xl font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">
+                            {module.title}
+                          </h3>
+                        </div>
+                        <p className="text-gray-600 mb-4">
+                          {module.description || 'Explore this module'}
+                        </p>
+                      </div>
+                      <svg
+                        className="w-6 h-6 text-indigo-600 transform group-hover:translate-x-1 transition-transform"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </div>
+
+                    <div className="flex items-center space-x-6 text-sm text-gray-600">
+                      <div className="flex items-center space-x-2">
+                        <span>📚</span>
+                        <span>Module {module.order_index}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span>🎯</span>
+                        <span>Beginner</span>
+                      </div>
+                    </div>
+
+                    {/* Progress bar */}
+                    <div className="mt-4">
+                      <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
+                        <span>Progress</span>
+                        <span>{progressPercent}%</span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-indigo-600 h-2 rounded-full transition-all"
+                          style={{ width: `${progressPercent}%` }}
+                        ></div>
+                      </div>
+                      {completedLessons > 0 && (
+                        <p className="text-xs text-gray-500 mt-1">
+                          {completedLessons} lessons completed
+                        </p>
+                      )}
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Empty State */}
+          {modules && modules.length === 0 && !isLoading && (
+            <div className="text-center py-12 text-gray-500">
+              <p className="text-lg mb-2">No modules available yet</p>
+              <p className="text-sm">Check back soon for new content!</p>
+            </div>
+          )}
+        </div>
+
+        {/* Quick Actions */}
+        <div className="bg-white rounded-lg shadow-xl p-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            Quick Actions
+          </h2>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            <Link
+              to="/game-demo"
+              className="flex flex-col items-center p-6 border border-gray-200 rounded-lg hover:border-indigo-300 hover:shadow-md transition-all"
             >
-              🎮 Try Game Components Demo
-            </button>
+              <span className="text-4xl mb-3">🎮</span>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Game Demo
+              </h3>
+              <p className="text-sm text-gray-600 text-center">
+                Try the interactive card game
+              </p>
+            </Link>
 
-            <p className="text-gray-600 mb-4">
-              Learning modules coming in Phase 5 & 6!
-            </p>
-            <div className="inline-flex space-x-2 text-sm">
-              <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full">
-                ✓ Phase 1: Setup
-              </span>
-              <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full">
-                ✓ Phase 2: Supabase
-              </span>
-              <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full">
-                ✓ Phase 3: Auth
-              </span>
-              <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full">
-                🚧 Phase 4: Game Components (In Progress)
-              </span>
+            <div className="flex flex-col items-center p-6 border border-gray-200 rounded-lg opacity-50">
+              <span className="text-4xl mb-3">📊</span>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Progress
+              </h3>
+              <p className="text-sm text-gray-600 text-center">
+                Coming in Phase 6
+              </p>
+            </div>
+
+            <div className="flex flex-col items-center p-6 border border-gray-200 rounded-lg opacity-50">
+              <span className="text-4xl mb-3">🏆</span>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Challenges
+              </h3>
+              <p className="text-sm text-gray-600 text-center">
+                Coming in Phase 7
+              </p>
             </div>
           </div>
         </div>
-      </main>
-    </div>
+
+        {/* Development Status */}
+        <div className="bg-white rounded-lg shadow-xl p-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            Development Status
+          </h2>
+
+          <div className="flex flex-wrap gap-2">
+            <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+              ✓ Phase 1: Setup
+            </span>
+            <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+              ✓ Phase 2: Supabase
+            </span>
+            <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+              ✓ Phase 3: Auth
+            </span>
+            <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+              ✓ Phase 4: Game Components
+            </span>
+            <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+              ✓ Phase 5: Routing & Layout
+            </span>
+            <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+              → Phase 6: Data Fetching (In Progress)
+            </span>
+          </div>
+        </div>
+      </div>
+    </DashboardLayout>
   );
 }

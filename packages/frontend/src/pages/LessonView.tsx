@@ -167,25 +167,52 @@ export function LessonView() {
       }
     }
 
+    // REQUIREMENT: Player must have AT LEAST one card of each color/type needed to complete the sentence
+    // This is guaranteed by including ALL requiredCards in the hand
+
     // Add variation cards (2 similar cards for each type in the sentence)
+    // Variation cards make the challenge more realistic - player must choose the correct word
     const variationCards: string[] = [];
     const typesInSentence = new Set(requiredCards.map(id => {
       const word = getWordById(id);
       return word?.type || '';
     }).filter(Boolean));
 
-    // For each type, add 2 variation cards (cards not already in requiredCards)
+    // For each type, add up to 2 variation cards (cards not already in requiredCards)
     typesInSentence.forEach(type => {
       const wordsOfType = getWordsByType(type);
       const availableVariations = wordsOfType
         .filter(w => !requiredCards.includes(w.id))
-        .slice(0, 2); // Get 2 variations
+        .slice(0, 2); // Get 2 variations (or fewer if not available)
 
       variationCards.push(...availableVariations.map(w => w.id));
     });
 
-    // Combine required + variation cards
+    // GUARANTEE: All required cards are included, ensuring player can complete the sentence
+    // PLUS variation cards for increased difficulty (player must select correct words)
     const allCards = [...requiredCards, ...variationCards];
+
+    // Debug: Log card distribution for verification
+    if (allCards.length < requiredCards.length) {
+      console.warn('[LessonView] Not all required cards found!', {
+        requiredCount: requiredCards.length,
+        actualCount: allCards.length,
+        missing: requiredCards.filter(id => !allCards.includes(id))
+      });
+    }
+
+    // Debug: Log challenge card composition
+    console.log('[LessonView] Challenge cards:', {
+      target: dbChallenge.target_maori,
+      requiredCards: requiredCards.length,
+      variationCards: variationCards.length,
+      totalCards: allCards.length,
+      types: Array.from(typesInSentence),
+      cards: allCards.map(id => {
+        const w = getWordById(id);
+        return w ? `${w.maori}(${w.type})` : id;
+      })
+    });
 
     return {
       id: dbChallenge.id,

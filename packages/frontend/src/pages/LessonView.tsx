@@ -548,7 +548,8 @@ export function LessonView() {
     if (p === 'noun') return 'blue'; // Nouns
     if (p === 'pronoun') return 'red'; // Pronouns
     if (p === 'demonstrative') return 'orange'; // Demonstratives (tēnei, tēnā, tērā)
-    if (p === 'Kei te') return 'yellow'; // Tense markers
+    if (p === 'tense_marker' || p === 'Kei te') return 'yellow'; // All tense markers (I, Kua, Ka, Kei te)
+    if (p === 'time_word') return 'teal'; // Time words (inanahi, āpōpō, ināianei, ānamata)
     if (p === 'adjective') return 'lightblue'; // Adjectives
     if (p === 'verb') return 'green'; // Verbs
     if (p === 'intensifier') return 'pink'; // Intensifiers (tino, āhua)

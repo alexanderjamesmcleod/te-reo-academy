@@ -15,6 +15,7 @@ import {
   validateHeSentence,
   validateEquativeSentence,
   validateKeiTeSentence,
+  ALL_WORDS,
 } from '@te-reo-academy/shared';
 import type { Card, ValidationResult } from '@te-reo-academy/shared';
 
@@ -101,6 +102,8 @@ export function LessonView() {
     };
 
     // Parse words and build pattern
+    console.log('[LessonView] Parsing target sentence:', dbChallenge.target_maori);
+
     for (let i = 0; i < words.length; i++) {
       const word = words[i];
       const nextWord = i < words.length - 1 ? words[i + 1] : null;
@@ -116,9 +119,11 @@ export function LessonView() {
       // Check if word is in our mapping
       if (wordIdMap[word]) {
         const wordId = wordIdMap[word];
+        console.log(`[LessonView] Found mapping: "${word}" → "${wordId}"`);
         const wordData = getWordById(wordId);
 
         if (wordData) {
+          console.log(`[LessonView] Found word data for ${wordId}:`, wordData.maori, wordData.type);
           // Determine pattern type from word data
           if (wordData.type === 'particle') {
             pattern.push(word); // Ko, He
@@ -141,10 +146,13 @@ export function LessonView() {
           }
           requiredCards.push(wordId);
         } else {
-          console.warn(`[LessonView] Word not found for mapped ID: ${wordId}`);
+          console.error(`[LessonView] ❌ CRITICAL: Word not found for mapped ID: "${wordId}"`);
+          console.error('[LessonView] This means player will NOT have this card!');
+          console.error('[LessonView] ALL_WORDS contains:', ALL_WORDS.length, 'words');
         }
       } else {
         // Unknown word - try to find it in word library as a noun
+        console.warn(`[LessonView] Word "${word}" not in wordIdMap, trying as noun...`);
         const normalizedWord = word
           .toLowerCase()
           .replace(/ā/g, 'a')
@@ -154,13 +162,16 @@ export function LessonView() {
           .replace(/ū/g, 'u');
 
         const possibleId = `n_${normalizedWord}`;
+        console.log(`[LessonView] Trying noun ID: "${possibleId}"`);
         const wordData = getWordById(possibleId);
 
         if (wordData) {
+          console.log(`[LessonView] Found as noun:`, wordData.maori);
           pattern.push('noun');
           requiredCards.push(possibleId);
         } else {
-          console.warn(`[LessonView] Unknown word in challenge: ${word}`);
+          console.error(`[LessonView] ❌ UNKNOWN WORD: "${word}"`);
+          console.error('[LessonView] Player will NOT have this card - challenge impossible!');
           pattern.push('unknown');
           requiredCards.push(`unknown_${word}`);
         }

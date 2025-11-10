@@ -144,7 +144,10 @@ export function LessonView() {
       const cards: Card[] = currentChallenge.requiredCards
         .map(wordId => {
           const word = getWordById(wordId);
-          if (!word) return null;
+          if (!word) {
+            console.error('[LessonView] Word not found for ID:', wordId);
+            return null;
+          }
           return {
             id: word.id,
             maori: word.maori,
@@ -590,9 +593,10 @@ export function LessonView() {
               to={`/modules/${lesson.module_id}`}
               className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-semibold"
             >
-              ← All Lessons
+              ← Back to Module
             </Link>
 
+            {/* TODO: Add previous/next lesson navigation
             {previousLesson && (
               <Link
                 to={`/lessons/${previousLesson.id}`}
@@ -610,6 +614,7 @@ export function LessonView() {
                 Next: {nextLesson.title} →
               </Link>
             )}
+            */}
           </div>
         </div>
       </div>

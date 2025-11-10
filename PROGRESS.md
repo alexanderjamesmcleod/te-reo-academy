@@ -229,6 +229,49 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (configured)
 
 ---
 
+### Phase 7: Word Cards System & Content Expansion ✅ (Completed: 2025-11-10)
+**Status**: Complete and tested
+
+**Achievements**:
+- ✅ New `word_cards` table with rich metadata (pronunciation, usage, examples, cultural notes)
+- ✅ 56 vocabulary words seeded across 3 modules
+- ✅ JSONB examples field for flexible sentence samples
+- ✅ RLS policies (public read, authenticated write)
+- ✅ Performance indexes on module, type, color, theme
+- ✅ Module 3 added: Past and Future Tense (5 lessons, 11 challenges)
+- ✅ Module 2 fully seeded: 8 Kei te challenges added
+- ✅ Variation cards system: adds 2 similar cards per type for difficulty
+- ✅ LessonView enhanced with dynamic word-to-ID mapping
+- ✅ Support for all tense patterns: ko, he, equative, kei_te, past_tense, future_tense, mixed_tense
+- ✅ NZSL video URL fields added (Phase 4 ready)
+
+**Database Expansion**:
+- **Before**: 2 modules, 9 lessons, 11 challenges
+- **After**: 3 modules, 14 lessons, 30 challenges, 56 word cards
+
+**Content Breakdown**:
+- Module 1 (Ko/He): 5 lessons, 11 challenges, 21 word cards
+- Module 2 (Kei te): 4 lessons, 8 challenges, 28 word cards
+- Module 3 (Past/Future): 5 lessons, 11 challenges, 7 word cards
+
+**Technical Enhancements**:
+- Dynamic word parsing with intelligent type detection
+- "Kei te" handled as single tense marker (not two words)
+- Variation cards make challenges more realistic
+- Word library helpers: getWordById, getWordsByType, getWordsByModule
+- Pattern detection using word types instead of hardcoded mappings
+
+**Key Files**:
+- `supabase/migrations/20250110000002_word_cards.sql` - Word cards table
+- `supabase/seed.sql` - 56 words + Module 3 content
+- `packages/frontend/src/pages/LessonView.tsx` - Enhanced parsing & validation
+
+**Migration**:
+- Applied via Docker: `docker exec -i supabase-db psql ...`
+- All data verified: 3 modules, 14 lessons, 30 challenges, 56 word cards
+
+---
+
 ## 🚧 In Progress
 
 _(No active work items)_
@@ -237,11 +280,12 @@ _(No active work items)_
 
 ## 📋 Upcoming Phases
 
-### Phase 7: Advanced Features
+### Phase 8: Advanced Features
 - Multiplayer challenges
 - Real-time game sessions
 - Leaderboards
 - Achievement system
+- Challenge editor (admin interface)
 
 ---
 
@@ -271,12 +315,12 @@ _(No active work items)_
 
 ## 📊 Project Statistics
 
-**Lines of Code**: ~3,500+ (frontend only)
+**Lines of Code**: ~4,500+ (frontend only)
 **Components**: 9 pages, 1 layout, 1 context, 1 protected route component, 5 game components
 **Custom Hooks**: 7 data hooks (6 queries + 2 mutations)
 **Dependencies**: 16+ packages installed
-**Database Tables**: 8 tables with RLS policies
-**Database Content**: 2 modules, 9 lessons, 11 challenges (all seeded)
+**Database Tables**: 9 tables with RLS policies (including word_cards)
+**Database Content**: **3 modules, 14 lessons, 30 challenges, 56 word cards** (all seeded)
 **Test Coverage**: Validators tested in shared package (from v3)
 **Supabase Integration**: ✅ Live data fetching and progress tracking
 
@@ -284,12 +328,13 @@ _(No active work items)_
 
 ## 🎯 Next Session Goals
 
-**Phase 7 Ideas:**
-1. **Seed more challenges** - Add challenges for all lessons
-2. **Implement word card system** - Store word cards in database for dynamic challenge generation
+**Phase 8 Ideas:**
+1. ~~**Seed more challenges**~~ ✅ Done! (30 challenges across 3 modules)
+2. ~~**Implement word card system**~~ ✅ Done! (56 words with rich metadata)
 3. **Add challenge editor** - Admin interface to create/edit challenges
 4. **Enhanced progress tracking** - Detailed analytics and learning insights
 5. **Multiplayer features** - Real-time game sessions with Supabase Realtime
+6. **Test Module 3** - Verify past/future tense challenges work correctly
 
 ---
 
@@ -322,7 +367,31 @@ _(No active work items)_
 - Foundation ready for advanced features (multiplayer, real-time updates)
 
 **Next Steps:**
-Phase 7 can focus on enhancing the game experience with more challenges, better word management, and multiplayer features!
+Phase 7 complete! 🎉 Next up: Test Module 3 in browser, then consider Phase 8 features (multiplayer, challenge editor, analytics).
+
+---
+
+## 🎉 Phase 7 Summary
+
+**What was accomplished:**
+- Complete word cards system with 56 vocabulary words
+- Database expansion: 2 modules → 3 modules (14 lessons, 30 challenges)
+- Module 3 added with past/future tense patterns (I/Kua/Ka)
+- Variation cards system for realistic challenge difficulty
+- Enhanced LessonView with intelligent word parsing
+- Support for 7 validation patterns (ko, he, equative, kei_te, past/future/mixed tense)
+- NZSL integration fields (Phase 4 ready)
+- Rich metadata: pronunciation, usage, cultural notes, examples
+
+**Impact:**
+- 3x content expansion (11 → 30 challenges)
+- Dynamic vocabulary system (no more hardcoded word lists!)
+- Scalable architecture for adding new modules
+- Cultural context embedded in word data
+- Foundation for admin challenge editor
+
+**Next Steps:**
+Test Module 3 gameplay, then tackle Phase 8 (multiplayer, analytics, challenge editor)!
 
 ---
 

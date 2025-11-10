@@ -787,6 +787,126 @@ export const WORDS_MODULE_2 = {
   ] as Word[]
 };
 
+// Module 3: Past and Future Tense
+export const WORDS_MODULE_3 = {
+  tense_markers_past: [
+    {
+      id: 'tm_i',
+      maori: 'I',
+      english: 'simple past marker',
+      type: 'tense_marker',
+      color: 'yellow',
+      pronunciation: 'ee',
+      usage: 'Marks completed actions in past - simple past',
+      examples: [
+        { maori: 'I kai au', english: 'I ate' },
+        { maori: 'I haere ia', english: 'He/she went' }
+      ],
+      module: 3,
+      nzsl_video_url: null,
+      nzsl_description: null
+    },
+    {
+      id: 'tm_kua',
+      maori: 'Kua',
+      english: 'perfect past marker',
+      type: 'tense_marker',
+      color: 'yellow',
+      pronunciation: 'koo-ah',
+      usage: 'Marks completed actions with present relevance',
+      examples: [
+        { maori: 'Kua kai au', english: 'I have eaten (already)' },
+        { maori: 'Kua haere ia', english: 'He/she has gone' }
+      ],
+      module: 3,
+      nzsl_video_url: null,
+      nzsl_description: null
+    }
+  ] as Word[],
+
+  tense_markers_future: [
+    {
+      id: 'tm_ka',
+      maori: 'Ka',
+      english: 'future tense marker',
+      type: 'tense_marker',
+      color: 'yellow',
+      pronunciation: 'kah',
+      usage: 'Marks actions that will happen',
+      examples: [
+        { maori: 'Ka kai au', english: 'I will eat' },
+        { maori: 'Ka haere ia', english: 'He/she will go' }
+      ],
+      module: 3,
+      nzsl_video_url: null,
+      nzsl_description: null
+    }
+  ] as Word[],
+
+  time_words: [
+    {
+      id: 'tw_inanahi',
+      maori: 'inanahi',
+      english: 'yesterday',
+      type: 'time_word',
+      color: 'teal',
+      pronunciation: 'ee-nah-nah-hee',
+      usage: 'Time reference for past',
+      examples: [
+        { maori: 'I kai au inanahi', english: 'I ate yesterday' }
+      ],
+      module: 3,
+      nzsl_video_url: null,
+      nzsl_description: null
+    },
+    {
+      id: 'tw_apopo',
+      maori: 'āpōpō',
+      english: 'tomorrow',
+      type: 'time_word',
+      color: 'teal',
+      pronunciation: 'ar-paw-paw',
+      usage: 'Time reference for future',
+      examples: [
+        { maori: 'Ka kai au āpōpō', english: 'I will eat tomorrow' }
+      ],
+      module: 3,
+      nzsl_video_url: null,
+      nzsl_description: null
+    },
+    {
+      id: 'tw_inaianei',
+      maori: 'ināianei',
+      english: 'now',
+      type: 'time_word',
+      color: 'teal',
+      pronunciation: 'ee-nai-ah-nay',
+      usage: 'Time reference for present',
+      examples: [
+        { maori: 'Kei te kai au ināianei', english: 'I am eating now' }
+      ],
+      module: 3,
+      nzsl_video_url: null,
+      nzsl_description: null
+    },
+    {
+      id: 'tw_anamata',
+      maori: 'ānamata',
+      english: 'future/in the future',
+      type: 'time_word',
+      color: 'teal',
+      pronunciation: 'ar-nah-mah-tah',
+      usage: 'General future time reference',
+      examples: [
+        { maori: 'Ka haere au ki te kura ānamata', english: 'I will go to school in the future' }
+      ],
+      module: 3,
+      nzsl_video_url: null,
+      nzsl_description: null
+    }
+  ] as Word[]
+};
+
 // Flattened word arrays
 export const MODULE_1_ALL_WORDS: Word[] = [
   ...WORDS_MODULE_1.particles,
@@ -806,9 +926,16 @@ export const MODULE_2_ALL_WORDS: Word[] = [
   ...WORDS_MODULE_2.pronouns_plural
 ];
 
+export const MODULE_3_ALL_WORDS: Word[] = [
+  ...WORDS_MODULE_3.tense_markers_past,
+  ...WORDS_MODULE_3.tense_markers_future,
+  ...WORDS_MODULE_3.time_words
+];
+
 export const ALL_WORDS: Word[] = [
   ...MODULE_1_ALL_WORDS,
-  ...MODULE_2_ALL_WORDS
+  ...MODULE_2_ALL_WORDS,
+  ...MODULE_3_ALL_WORDS
 ];
 
 // Helper functions
@@ -832,8 +959,10 @@ export function getWordsByModule(moduleNumber: number): Word[] {
 export default {
   WORDS_MODULE_1,
   WORDS_MODULE_2,
+  WORDS_MODULE_3,
   MODULE_1_ALL_WORDS,
   MODULE_2_ALL_WORDS,
+  MODULE_3_ALL_WORDS,
   ALL_WORDS,
   getWordById,
   getWordsByType,

@@ -9,7 +9,9 @@ export interface Card {
   [key: string]: any; // Allow additional properties
 }
 
-export interface Challenge {
+// Validator-specific challenge input (simpler than full Challenge from lesson.types)
+// Validators import this directly from validation.types.ts to avoid conflicts
+export interface ValidatorChallenge {
   id: string;
   instruction: string;
   pattern: string[];
@@ -20,6 +22,9 @@ export interface Challenge {
   requiredWords?: string[];
   hints?: string[];
 }
+
+// Alias for backward compatibility with existing validators
+export type Challenge = ValidatorChallenge;
 
 export interface ValidationFeedback {
   type: 'success' | 'warning' | 'error';

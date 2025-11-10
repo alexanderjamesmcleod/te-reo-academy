@@ -42,22 +42,49 @@ export function LessonView() {
 
     words.forEach(word => {
       // Map actual words to pattern slots and word IDs
-      if (word === 'Ko' || word === 'He') {
-        pattern.push(word);
-        requiredCards.push(word.toLowerCase()); // 'ko' or 'he' word IDs
-      } else if (word === 'te' || word === 'ngā') {
-        pattern.push(word);
-        requiredCards.push(word); // 'te' or 'nga' word IDs
-      } else if (word === 'tēnei' || word === 'tēnā' || word === 'tērā') {
+      // Word library uses prefixed IDs: p_ for particles, art_ for articles, n_ for nouns, etc.
+      if (word === 'Ko') {
+        pattern.push('Ko');
+        requiredCards.push('p_ko');
+      } else if (word === 'He') {
+        pattern.push('He');
+        requiredCards.push('p_he');
+      } else if (word === 'te') {
+        pattern.push('te');
+        requiredCards.push('art_te');
+      } else if (word === 'ngā') {
+        pattern.push('ngā');
+        requiredCards.push('art_nga');
+      } else if (word === 'tēnei') {
         pattern.push('demonstrative');
-        requiredCards.push(word); // demonstrative word IDs
-      } else if (word === 'au' || word === 'koe' || word === 'ia') {
+        requiredCards.push('d_tenei');
+      } else if (word === 'tēnā') {
+        pattern.push('demonstrative');
+        requiredCards.push('d_tena');
+      } else if (word === 'tērā') {
+        pattern.push('demonstrative');
+        requiredCards.push('d_tera');
+      } else if (word === 'au') {
         pattern.push('pronoun');
-        requiredCards.push(word); // pronoun word IDs
+        requiredCards.push('pr_au');
+      } else if (word === 'koe') {
+        pattern.push('pronoun');
+        requiredCards.push('pr_koe');
+      } else if (word === 'ia') {
+        pattern.push('pronoun');
+        requiredCards.push('pr_ia');
       } else {
-        // It's a noun - find the actual word ID from word library
+        // It's a noun - convert to word library ID format
         pattern.push('noun');
-        requiredCards.push(word.toLowerCase()); // noun word IDs (kākā, manu, etc.)
+        // Convert macrons: ā→a, ē→e, ī→i, ō→o, ū→u
+        const normalizedWord = word
+          .toLowerCase()
+          .replace(/ā/g, 'a')
+          .replace(/ē/g, 'e')
+          .replace(/ī/g, 'i')
+          .replace(/ō/g, 'o')
+          .replace(/ū/g, 'u');
+        requiredCards.push(`n_${normalizedWord}`);
       }
     });
 

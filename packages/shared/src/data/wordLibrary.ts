@@ -182,6 +182,73 @@ export const WORDS_MODULE_1 = {
       module: 1,
       nzsl_video_url: null,
       nzsl_description: null
+    },
+    {
+      id: 'n_tamariki',
+      maori: 'tamariki',
+      english: 'children',
+      type: 'noun',
+      color: 'blue',
+      pronunciation: 'tah-mah-ree-kee',
+      theme: 'people',
+      module: 1,
+      note: 'Plural of tamaiti',
+      nzsl_video_url: null,
+      nzsl_description: null
+    },
+    {
+      id: 'n_kaka',
+      maori: 'kākā',
+      english: 'parrot (native NZ bird)',
+      type: 'noun',
+      color: 'blue',
+      pronunciation: 'kar-kar',
+      plural: 'kākā',
+      theme: 'animals',
+      module: 1,
+      culturalNote: 'Endemic forest parrot, important in Māori culture',
+      nzsl_video_url: null,
+      nzsl_description: null
+    },
+    {
+      id: 'n_manu',
+      maori: 'manu',
+      english: 'bird',
+      type: 'noun',
+      color: 'blue',
+      pronunciation: 'mah-noo',
+      plural: 'manu',
+      theme: 'animals',
+      module: 1,
+      nzsl_video_url: null,
+      nzsl_description: null
+    },
+    {
+      id: 'n_pouako',
+      maori: 'pouako',
+      english: 'teacher',
+      type: 'noun',
+      color: 'blue',
+      pronunciation: 'poh-ah-kaw',
+      plural: 'pouako',
+      theme: 'people',
+      module: 1,
+      note: 'Alternative to kaiako',
+      nzsl_video_url: null,
+      nzsl_description: null
+    },
+    {
+      id: 'n_tauira',
+      maori: 'tauira',
+      english: 'student',
+      type: 'noun',
+      color: 'blue',
+      pronunciation: 'tah-oo-ee-rah',
+      plural: 'tauira',
+      theme: 'people',
+      module: 1,
+      nzsl_video_url: null,
+      nzsl_description: null
     }
   ] as Word[],
 

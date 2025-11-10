@@ -32,7 +32,52 @@ export function LessonView() {
 
   // Fetch challenges for this lesson
   const { data: challengesData, isLoading: challengesLoading, error: challengesError } = useChallenges(lessonId || '');
-  const challenges = challengesData || [];
+
+  // Transform database challenges to expected format
+  const challenges = (challengesData || []).map(dbChallenge => {
+    // Parse target sentence to build pattern and required cards
+    const words = dbChallenge.target_maori.split(' ');
+    const pattern: string[] = [];
+    const requiredCards: string[] = [];
+
+    words.forEach(word => {
+      // Map actual words to pattern slots and word IDs
+      if (word === 'Ko' || word === 'He') {
+        pattern.push(word);
+        requiredCards.push(word.toLowerCase()); // 'ko' or 'he' word IDs
+      } else if (word === 'te' || word === 'ngā') {
+        pattern.push(word);
+        requiredCards.push(word); // 'te' or 'nga' word IDs
+      } else if (word === 'tēnei' || word === 'tēnā' || word === 'tērā') {
+        pattern.push('demonstrative');
+        requiredCards.push(word); // demonstrative word IDs
+      } else if (word === 'au' || word === 'koe' || word === 'ia') {
+        pattern.push('pronoun');
+        requiredCards.push(word); // pronoun word IDs
+      } else {
+        // It's a noun - find the actual word ID from word library
+        pattern.push('noun');
+        requiredCards.push(word.toLowerCase()); // noun word IDs (kākā, manu, etc.)
+      }
+    });
+
+    return {
+      id: dbChallenge.id,
+      type: 'build' as const,
+      difficulty: 'easy' as const,
+      instruction: dbChallenge.hint || `Build the sentence: ${dbChallenge.target_english}`,
+      target: {
+        maori: dbChallenge.target_maori,
+        english: dbChallenge.target_english,
+      },
+      pattern,
+      requiredCards,
+      hints: dbChallenge.hint ? [{
+        trigger: 'help',
+        message: dbChallenge.hint,
+      }] : undefined,
+    };
+  });
 
   // Fetch progress for this lesson
   const { data: progress } = useLessonProgress(lessonId || '');

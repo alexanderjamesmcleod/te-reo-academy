@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { DashboardLayout } from '@/layouts/DashboardLayout';
@@ -33,8 +33,8 @@ export function LessonView() {
   // Fetch challenges for this lesson
   const { data: challengesData, isLoading: challengesLoading, error: challengesError } = useChallenges(lessonId || '');
 
-  // Transform database challenges to expected format
-  const challenges = (challengesData || []).map(dbChallenge => {
+  // Transform database challenges to expected format (memoized to prevent re-shuffling on every render)
+  const challenges = useMemo(() => (challengesData || []).map(dbChallenge => {
     // Parse target sentence to build pattern and required cards
     const words = dbChallenge.target_maori.split(' ');
     const pattern: string[] = [];
@@ -104,7 +104,7 @@ export function LessonView() {
         message: dbChallenge.hint,
       }] : undefined,
     };
-  });
+  }), [challengesData]);
 
   // Fetch progress for this lesson
   const { data: progress } = useLessonProgress(lessonId || '');

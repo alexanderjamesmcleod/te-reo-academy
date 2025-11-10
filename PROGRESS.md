@@ -221,10 +221,11 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (configured)
 - Progress indicators on module and lesson cards
 
 **Database Integration**:
-- Verified: 2 modules, 9 lessons, 3 challenges in database
+- Verified: 2 modules, 9 lessons, 11 challenges in database
 - Progress saves correctly to `user_progress` table
 - Attempts save correctly to `lesson_attempts` table
 - Cache invalidation triggers refetch after mutations
+- Seed file updated with all 11 challenges for persistent data
 
 ---
 
@@ -272,9 +273,10 @@ _(No active work items)_
 
 **Lines of Code**: ~3,500+ (frontend only)
 **Components**: 9 pages, 1 layout, 1 context, 1 protected route component, 5 game components
-**Custom Hooks**: 6 data hooks (5 queries + 2 mutations)
+**Custom Hooks**: 7 data hooks (6 queries + 2 mutations)
 **Dependencies**: 16+ packages installed
 **Database Tables**: 8 tables with RLS policies
+**Database Content**: 2 modules, 9 lessons, 11 challenges (all seeded)
 **Test Coverage**: Validators tested in shared package (from v3)
 **Supabase Integration**: ✅ Live data fetching and progress tracking
 

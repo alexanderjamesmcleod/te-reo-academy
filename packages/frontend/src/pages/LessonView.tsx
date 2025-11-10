@@ -9,6 +9,8 @@ import { useSaveProgress, useUpdateProgress } from '@/hooks/useSaveProgress';
 import { useLessonProgress } from '@/hooks/useProgress';
 import {
   getWordById,
+  getWordsByType,
+  getWordsByModule,
   validateKoSentence,
   validateHeSentence,
   validateEquativeSentence,
@@ -40,43 +42,109 @@ export function LessonView() {
     const pattern: string[] = [];
     const requiredCards: string[] = [];
 
-    words.forEach(word => {
-      // Map actual words to pattern slots and word IDs
-      // Word library uses prefixed IDs: p_ for particles, art_ for articles, n_ for nouns, etc.
-      if (word === 'Ko') {
-        pattern.push('Ko');
-        requiredCards.push('p_ko');
-      } else if (word === 'He') {
-        pattern.push('He');
-        requiredCards.push('p_he');
-      } else if (word === 'te') {
-        pattern.push('te');
-        requiredCards.push('art_te');
-      } else if (word === 'ngā') {
-        pattern.push('ngā');
-        requiredCards.push('art_nga');
-      } else if (word === 'tēnei') {
-        pattern.push('demonstrative');
-        requiredCards.push('d_tenei');
-      } else if (word === 'tēnā') {
-        pattern.push('demonstrative');
-        requiredCards.push('d_tena');
-      } else if (word === 'tērā') {
-        pattern.push('demonstrative');
-        requiredCards.push('d_tera');
-      } else if (word === 'au') {
-        pattern.push('pronoun');
-        requiredCards.push('pr_au');
-      } else if (word === 'koe') {
-        pattern.push('pronoun');
-        requiredCards.push('pr_koe');
-      } else if (word === 'ia') {
-        pattern.push('pronoun');
-        requiredCards.push('pr_ia');
+    // Word ID mapping for all modules
+    const wordIdMap: Record<string, string> = {
+      // Module 1: Particles & Articles
+      'Ko': 'p_ko',
+      'He': 'p_he',
+      'te': 'art_te',
+      'ngā': 'art_nga',
+      // Module 1: Demonstratives
+      'tēnei': 'd_tenei',
+      'tēnā': 'd_tena',
+      'tērā': 'd_tera',
+      // Module 1: Pronouns
+      'au': 'pr_au',
+      'koe': 'pr_koe',
+      'ia': 'pr_ia',
+      // Module 2: Tense Markers
+      'Kei': 'tm_keite', // Special case: "Kei te" will be handled in parsing logic
+      // Module 3: Tense Markers
+      'I': 'tm_i',
+      'Kua': 'tm_kua',
+      'Ka': 'tm_ka',
+      // Module 2: Verbs
+      'haere': 'v_haere',
+      'kai': 'v_kai',
+      'noho': 'v_noho',
+      'oma': 'v_oma',
+      'mahi': 'v_mahi',
+      'ako': 'v_ako',
+      'māhaki': 'v_mahaki',
+      // Module 2: Adjectives
+      'pai': 'adj_pai',
+      'harikoa': 'adj_harikoa',
+      'māuiui': 'adj_mauiui',
+      'ngenge': 'adj_ngenge',
+      'pōuri': 'adj_pouri',
+      'riri': 'adj_riri',
+      'ora': 'adj_ora',
+      'hiamoe': 'adj_hiamoe',
+      'matekai': 'adj_matekai',
+      'hiainu': 'adj_hiainu',
+      // Module 2: Intensifiers
+      'tino': 'int_tino',
+      'āhua': 'int_ahua',
+      // Module 2: Locative Particles
+      'i': 'pl_i',
+      'ki': 'pl_ki',
+      // Module 3: Time Words
+      'inanahi': 'tw_inanahi',
+      'āpōpō': 'tw_apopo',
+      'ināianei': 'tw_inaianei',
+      'ānamata': 'tw_anamata',
+      // Module 2: Plural Pronouns
+      'mātou': 'pr_matou',
+      'tātou': 'pr_tatou',
+      'koutou': 'pr_koutou',
+      'rātou': 'pr_ratou',
+    };
+
+    // Parse words and build pattern
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i];
+      const nextWord = i < words.length - 1 ? words[i + 1] : null;
+
+      // Special case: "Kei te" is a single tense marker
+      if (word === 'Kei' && nextWord === 'te') {
+        pattern.push('tense_marker');
+        requiredCards.push('tm_keite');
+        i++; // Skip next word since we consumed it
+        continue;
+      }
+
+      // Check if word is in our mapping
+      if (wordIdMap[word]) {
+        const wordId = wordIdMap[word];
+        const wordData = getWordById(wordId);
+
+        if (wordData) {
+          // Determine pattern type from word data
+          if (wordData.type === 'particle') {
+            pattern.push(word); // Ko, He
+          } else if (wordData.type === 'article') {
+            pattern.push(word); // te, ngā
+          } else if (wordData.type === 'tense_marker') {
+            pattern.push('tense_marker');
+          } else if (wordData.type === 'verb') {
+            pattern.push('verb');
+          } else if (wordData.type === 'adjective') {
+            pattern.push('adjective');
+          } else if (wordData.type === 'intensifier') {
+            pattern.push('intensifier');
+          } else if (wordData.type === 'particle_locative') {
+            pattern.push('locative');
+          } else if (wordData.type === 'time_word') {
+            pattern.push('time_word');
+          } else {
+            pattern.push(wordData.type);
+          }
+          requiredCards.push(wordId);
+        } else {
+          console.warn(`[LessonView] Word not found for mapped ID: ${wordId}`);
+        }
       } else {
-        // It's a noun - convert to word library ID format
-        pattern.push('noun');
-        // Convert macrons: ā→a, ē→e, ī→i, ō→o, ū→u
+        // Unknown word - try to find it in word library as a noun
         const normalizedWord = word
           .toLowerCase()
           .replace(/ā/g, 'a')
@@ -84,9 +152,40 @@ export function LessonView() {
           .replace(/ī/g, 'i')
           .replace(/ō/g, 'o')
           .replace(/ū/g, 'u');
-        requiredCards.push(`n_${normalizedWord}`);
+
+        const possibleId = `n_${normalizedWord}`;
+        const wordData = getWordById(possibleId);
+
+        if (wordData) {
+          pattern.push('noun');
+          requiredCards.push(possibleId);
+        } else {
+          console.warn(`[LessonView] Unknown word in challenge: ${word}`);
+          pattern.push('unknown');
+          requiredCards.push(`unknown_${word}`);
+        }
       }
+    }
+
+    // Add variation cards (2 similar cards for each type in the sentence)
+    const variationCards: string[] = [];
+    const typesInSentence = new Set(requiredCards.map(id => {
+      const word = getWordById(id);
+      return word?.type || '';
+    }).filter(Boolean));
+
+    // For each type, add 2 variation cards (cards not already in requiredCards)
+    typesInSentence.forEach(type => {
+      const wordsOfType = getWordsByType(type);
+      const availableVariations = wordsOfType
+        .filter(w => !requiredCards.includes(w.id))
+        .slice(0, 2); // Get 2 variations
+
+      variationCards.push(...availableVariations.map(w => w.id));
     });
+
+    // Combine required + variation cards
+    const allCards = [...requiredCards, ...variationCards];
 
     return {
       id: dbChallenge.id,
@@ -98,7 +197,8 @@ export function LessonView() {
         english: dbChallenge.target_english,
       },
       pattern,
-      requiredCards,
+      pattern_type: dbChallenge.pattern_type, // Add pattern_type for validation routing
+      requiredCards: allCards, // Now includes variation cards!
       hints: dbChallenge.hint ? [{
         trigger: 'help',
         message: dbChallenge.hint,
@@ -214,11 +314,11 @@ export function LessonView() {
     let result: ValidationResult;
     const validChallenge = {
       id: currentChallenge.id,
-      instruction: '',
-      pattern: currentChallenge.pattern_type.split('_'),
+      instruction: currentChallenge.instruction,
+      pattern: currentChallenge.pattern, // Use the actual pattern array, not pattern_type.split
       target: {
-        maori: currentChallenge.target_maori,
-        english: currentChallenge.target_english,
+        maori: currentChallenge.target.maori,
+        english: currentChallenge.target.english,
       },
     };
 
@@ -234,9 +334,15 @@ export function LessonView() {
         result = validateEquativeSentence(sentence as Card[], validChallenge);
         break;
       case 'kei_te':
+      case 'past_tense':
+      case 'future_tense':
+      case 'mixed_tense':
+        // All tense-based patterns use the same validator
+        // (Kei te, I/Kua past, Ka future all follow: tense_marker + verb/adj + pronoun)
         result = validateKeiTeSentence(sentence as Card[], validChallenge);
         break;
       default:
+        console.warn('[LessonView] Unknown pattern_type:', currentChallenge.pattern_type);
         result = validateKoSentence(sentence as Card[], validChallenge);
     }
 
